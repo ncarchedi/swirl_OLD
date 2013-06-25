@@ -210,14 +210,14 @@ isYes <- function(response) {
 
 praise <- function() {
   # Prints random praise
-  praise.options <- scan(file=file.path(path.package("swirl"), "inst/praise.txt"), what=character(), quiet=TRUE)
+  praise.options <- scan(file=file.path(path.package("swirl"), "praise.txt"), what=character(), quiet=TRUE)
   i <- sample(1:length(praise.options), 1)
   cat("\n", praise.options[[i]], "\n", sep="")
 }
 
 tryAgain <- function(hint="") {
   # Prints encouragement to try again with hint if desired
-  tryagain.options <- scan(file=file.path(path.package("swirl"), "inst/try_again.txt"), what=character(), quiet=TRUE)
+  tryagain.options <- scan(file=file.path(path.package("swirl"), "try_again.txt"), what=character(), quiet=TRUE)
   i <- sample(1:length(tryagain.options), 1)
   cat("\n", tryagain.options[[i]], " ", hint, sep="")
 }

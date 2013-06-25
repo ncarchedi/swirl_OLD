@@ -1,8 +1,17 @@
+#' Run the swirl program.
+#' 
+#' This function is the main component of the swirl interactive learning 
+#' system. It gets all necessary information from the user and reads all 
+#' module content directly from the location specified by the user. When the
+#' user quits the program via the Esc key, all progress is saved so he 
+#' or she can resume their session at a later time.
+#' 
+#' @export
+#' @author Nicholas A. Carchedi
 swirl <- function() {
-  
   tryCatch({
     ##### SET DIRECTORY WHERE MODULES OF INTEREST ARE LOCATED #####
-    module.dir <- file.path(path.package("swirl"), "inst", "Open_Intro_Modules")
+    module.dir <- file.path(path.package("swirl"), "Open_Intro_Modules")
     
     # Run openingMenu, which returns module name and row number on which to begin
     start <- openingMenu()
