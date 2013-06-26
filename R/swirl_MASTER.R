@@ -14,6 +14,7 @@ swirl <- function() {
     module.dir <- file.path(path.package("swirl"), "Open_Intro_Modules")
     
     # Run openingMenu, which returns module name and row number on which to begin
+    cat("\nWelcome! My name is Swirl and I'll be your host today!")
     start <- openingMenu()
     module.start <- start[[1]]  # Character string
     row.start <- start[[2]]  # Numeric

@@ -14,3 +14,4 @@ License: GPL-3
 Collate:
     'swirl_HELPER.R'
     'swirl_MASTER.R'
+    'openingMenu.R'
