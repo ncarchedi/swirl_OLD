@@ -1,4 +1,4 @@
-#' Run the swirl program.
+#' Runs the swirl program
 #' 
 #' This function is the main component of the swirl interactive learning 
 #' system. It gets all necessary information from the user and reads all 

@@ -1,22 +1,40 @@
 ### HELPER FUNCTIONS
 
+#' Records (appends) a string to designated text file
+#' 
+#' In the swirl function, it is used to output progress to a progress file.
+#' 
+#' @param my.string character string
+#' @param text.file.path full file path of text file where string is recorded
 recordString <- function(my.string, text.file.path) {
-  # Function to record (appends) a string to designated text file
-  # Used for recording user responses in progress files
   cat("user.answer", my.string, "\n", file=text.file.path, append=TRUE)
 }
 
+#' Records whether correct answer
+#' 
+#' Records TRUE or FALSE to designated text file. In the swirl function, it is 
+#' used to denote whether user's answer is right or wrong.
+#' 
+#' @param is.correct logical, TRUE or FALSE
+#' @param text.file.path full file path of text file where string is recorded
 recordIsCorrect <- function(is.correct, text.file.path) {
-  # Function to record TRUE or FALSE to a text file
-  # Used to denote whether user's answer is right or wrong
   cat("is.correct", is.correct, "\n", file=text.file.path, append=TRUE)
 }
 
+#' Gets user input
+#' 
+#' Solicits a response from user depending on the type of question specified. 
+#' Also writes corresponding progress data to progress file.
+#' 
+#' @param question character string representing the question body
+#' @param type character string specifying the type of question
+#' @param choices character vector of choices, only specified for question type
+#' "multiple"
+#' @param correct character string representing the correct answer
+#' @param hint character string of hint to be shown to user after incorrect response
+#' @param progress.file.path full file path to file where progress is recorded
 userInput <- function(question, type=c("exact", "range", "text", "command", "multiple"), 
                       choices="", correct, hint="", progress.file.path) {
-  # Accepts the correct answer, type of answer, and a hint
-  # as arguments and executes the appropriate input sequence
-  
   # Print question
   cat("\n", question, sep="")
   
@@ -188,9 +206,13 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
   }
 }
 
+#' Determines whether yes or no
+#' 
+#' Determines whether a response to a yes/no question is yes or no.
+#' 
+#' @param response character vector containing response to a yes/no question
+#' @return Logical, TRUE or FALSE
 isYes <- function(response) {
-  # Define isYes function - accepts response to yes/no questions and 
-  # returns TRUE if yes and FALSE if no
   yes <- NA
   if(!identical(response, character(0))) {
     if(tolower(substr(response, 1, 1)) == "y") {
@@ -208,35 +230,57 @@ isYes <- function(response) {
   }
 }
 
+#' Prints praise message
+#' 
+#' Prints random message of praise from text file containing several messages.
 praise <- function() {
-  # Prints random praise
   praise.options <- scan(file=file.path(path.package("swirl"), "praise.txt"), what=character(), quiet=TRUE)
   i <- sample(1:length(praise.options), 1)
   cat("\n", praise.options[[i]], "\n", sep="")
 }
 
+#' Prints encouragement and hint
+#' 
+#' Prints random message of encouragement for user to try again.
+#' 
+#' @param hint a character string containing a hint to the user
 tryAgain <- function(hint="") {
-  # Prints encouragement to try again with hint if desired
   tryagain.options <- scan(file=file.path(path.package("swirl"), "try_again.txt"), what=character(), quiet=TRUE)
   i <- sample(1:length(tryagain.options), 1)
   cat("\n", tryagain.options[[i]], " ", hint, sep="")
 }
 
+#' Prints progress markers
+#' 
+#' Generates visual progress markers in console.
+#' 
+#' @param current.row numeric representing the current row that the user is on
+#' in the module spreadsheet
+#' @param total.rows numeric representing the total number of rows in the module
+#' spreadsheet
 progressMarkers <- function(current.row, total.rows) {
-  # Function to generate visual progress markers
   percent.complete <- round((current.row/total.rows)*100)
   cat("\n")
   if(total.rows >= 10) {
     total.marks <- 10
     ticks <- round(total.rows/total.marks)
     marks <- floor(current.row/ticks)
-    cat("PROGRESS: << ", rep("(X) ", marks), rep("( ) ", total.marks-marks), ">> ", sep="")
+    cat("PROGRESS: << ", rep("(X) ", marks), rep("( ) ", total.marks-marks), 
+        ">> ", sep="")
   }
   cat("(", percent.complete, "% Complete)\n", sep="")
 }
 
+#' Finds row of last "new" figure
+#' 
+#' Finds the row number of the last "new" figure in the specified module. Used 
+#' for when a user is resuming progress on a partially completed module and a 
+#' previous figure needs to be loaded. It must be "new" since any "addition"
+#' figures expect an existing "new" figure is already in place.
+#' 
+#' @param content.table data.frame containing a complete swirl module
+#' @param row.start numeric specifying the row that the user is starting on
 lastNewFigRow <- function(content.table, row.start) {
-  # Function to find the row number of the last "new" figure in module
   fig.loc <- which(content.table$Figure != "")  # Find locations of figures in module
   last.fig.row <- fig.loc[max(which(fig.loc < row.start))]
   if(content.table$Figure.Type[last.fig.row]=="new") {  # If last figure is "new" then just source it
@@ -246,9 +290,14 @@ lastNewFigRow <- function(content.table, row.start) {
   }
 }
 
+#' Stores user info
+#' 
+#' Stores first time user info in a new text file and returns the file path. 
+#' Also creates a progress file and returns location of it.
+#' 
+#' @return List containing the full file paths of the user info file and user
+#' progress file, respectively
 storeUserInfo <- function() {
-  # Function that stores first time user info in a new text file and returns location of file
-  # Also creates progress file and returns location of file
   cat("\nI'm really glad to have you on board. We'll be spending quite a bit of time together, so we should get to know each other before we dive in. What's your name?\n\n")
   
   # Get user name
@@ -280,16 +329,31 @@ storeUserInfo <- function() {
   return(list(user.info.file.path, progress.file.path))
 }
 
+#' Gets user file names
+#' 
+#' Takes username as input and returns a list containing the appropriate user 
+#' file names. The function does not attempt to verify whether these files exist.
+#' 
+#' @param username character string containing valid swirl username, which is
+#' just the part of an email address before the "at" symbol.
+#' @return List containing the expected full file paths of the user info file 
+#' and user progress file, respectively
 getUserFileNames <- function(username) {
-  # Takes username as input and returns a list containing the appropriate user file names
   user.info.file.path <- file.path(path.package("swirl"), "user_data", paste(username,"_info.txt", sep=""))
   progress.file.path <- file.path(path.package("swirl"), "user_data", paste(username,"_progress.txt", sep=""))
   return(list(user.info.file.path, progress.file.path))
 }
 
-runModule <- function(module.dir, module.name, row.start, progress.file.path) {
-  ### Runs module given by module.name, beginning at row given by row.start
-  
+#' Runs module
+#' 
+#' Runs specified swirl module beginning at specified row.
+#' 
+#' @param module.dir full path of directory where module is located
+#' @param module.name character string specifying the name of the module
+#' (Ex: "Module1")
+#' @param row.start numeric specifying on which row of the module to begin
+#' @param progress.file.path full file path of the user progress file
+runModule <- function(module.dir, module.name, row.start, progress.file.path) {  
   # Determine file extention for current module info and content
   mod.info.path <- file.path(module.dir, paste(module.name, "_Info.csv", sep=""))
   mod.content.path <- file.path(module.dir, paste(module.name, ".csv", sep=""))
@@ -401,6 +465,14 @@ runModule <- function(module.dir, module.name, row.start, progress.file.path) {
   }
 }
 
+#' Gets username from email address
+#' 
+#' Extracts a swirl username from a given email address. Does not validate
+#' format of email address.
+#' 
+#' @param email character string representing a valid email address
+#' @return Character string containing the portion of the email address prior to
+#' the "at" symbol
 email2username <- function(email) {
   username <- strsplit(email, split="@")[[1]][1]
   return(username)

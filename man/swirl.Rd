@@ -1,6 +1,6 @@
 \name{swirl}
 \alias{swirl}
-\title{Run the swirl program.}
+\title{Runs the swirl program}
 \usage{
   swirl()
 }
