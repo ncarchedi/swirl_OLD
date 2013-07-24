@@ -259,12 +259,13 @@ tryAgain <- function(hint="") {
 #' @param total.rows numeric representing the total number of rows in the module
 #' spreadsheet
 progressMarkers <- function(current.row, total.rows) {
+  
   percent.complete <- round((current.row/total.rows)*100)
   cat("\n")
   if(total.rows >= 10) {
     total.marks <- 10
     ticks <- round(total.rows/total.marks)
-    marks <- floor(current.row/ticks)
+    marks <- ceiling(current.row/ticks)
     cat("PROGRESS: << ", rep("(X) ", marks), rep("( ) ", total.marks-marks), 
         ">> ", sep="")
   }
