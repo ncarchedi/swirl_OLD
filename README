@@ -1,1 +1,11 @@
-Official repository for the swirl (Statistics with Interactive R Learning) package
+Official repository for the swirl (Statistics with Interactive R Learning) R package.
+
+If you wish to install the package on your own computer, perform the following commands from your R console:
+
+> install.packages("devtools")
+> library(devtools)
+> install_github(repo="swirl", username="ncarchedi", auth_user="your_github_username", password="your_github_password")
+> library(swirl)
+> swirl()
+
+NOTE: You must be listed as a contributor to this repository in order to install the package, since it is still private.
