@@ -375,7 +375,7 @@ runModule <- function(module.dir, module.name, row.start, progress.file.path) {
   data(list=datasets.as.chars, envir=.GlobalEnv)
   
   # Load content from csv file -- first 9 columns
-  mod <- read.csv(file=mod.content.path, colClasses="character")[,1:9]
+  mod <- read.csv(file=mod.content.path, colClasses="character")[,1:10]
   
   # Find end of content and trim empty rows after this
   last.row <- max(which(mod$Output.Type != ""))
@@ -419,7 +419,7 @@ runModule <- function(module.dir, module.name, row.start, progress.file.path) {
   ### Read content from table
   for(i in row.start:nrow(mod)) {
     # Print row number to progress file
-    cat("row", i, "\n", sep="", file=progress.file.path, append=TRUE)
+    cat("row", i, " tag ", mod$Tag[i],"\n", sep="", file=progress.file.path, append=TRUE)
     cat("output.type", mod$Output.Type[i], "\n", sep=" ", file=progress.file.path, append=TRUE)
     
     # Indicator to suppress progress bar
@@ -477,4 +477,52 @@ runModule <- function(module.dir, module.name, row.start, progress.file.path) {
 email2username <- function(email) {
   username <- strsplit(email, split="@")[[1]][1]
   return(username)
+}
+
+#' Reviews user progress file for questions that the user struggled with and
+#' returns a list of tags associated with those questions
+#' 
+#' @param progressFilePath path to user progress file
+#' @return tags list of tags associated with questions with which the user
+#' struggled
+findTroubleTags <- function(progressFilePath) {
+  lines <- readLines(progressFilePath)
+  qbegin <- grep("output.type question", lines, fixed=TRUE)
+  newRows <- grep("row[0-9]+", lines)
+  qend <- c(rep(NA, length(qbegin)))
+  
+  for(i in 1:length(qbegin)) {
+    biggerThan <- newRows > qbegin[i]
+    if(all(qbegin[i] > newRows)) {
+      next
+    } else {
+      qend[i] <- newRows[min(which(biggerThan == TRUE))]
+    }
+  }
+  
+  falseAns <- grep("is.correct FALSE", lines, fixed=TRUE)
+  numFalse <- c(rep(NA, length(qbegin)))
+  
+  for(i in 1:length(qbegin)) {
+    numFalse[i] <- sum(falseAns > qbegin[i] & falseAns < qend[i])
+  }
+  
+  flags <- c(rep(FALSE, length(qbegin)))
+  for(qnum in 1:length(flags)) {
+    if(numFalse[qnum] > 2) {
+      flags[qnum] <- TRUE
+    }
+  }
+  
+  rowFlagged <- qbegin[flags == TRUE] - 1
+  linesFlagged <- lines[rowFlagged]
+  splitLines <- strsplit(linesFlagged, " ")
+  
+  tags <- list()
+  for(i in 1:length(linesFlagged)) {
+    tags[[i]] <- paste(splitLines[[i]][3:length(splitLines[[i]])], collapse=" ")
+  }
+  
+  # Return list of unique tags -- no duplicates
+  return(unique(tags))
 }

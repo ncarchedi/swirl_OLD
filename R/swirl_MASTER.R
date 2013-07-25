@@ -33,6 +33,13 @@ swirl <- function() {
       # Run module i
       module.name <- master.module.list[[i]]
       runModule(module.dir, module.name, row.start, progress.file.name)
+      
+      # Suggest topics to review
+      tags2Review <- findTroubleTags(progressFilePath=progress.file.name)
+      if(length(tags2Review) > 0) {
+        cat("\nIt appears that you struggled with the following topics:",
+            paste(tags2Review, collapse=", "))
+      }
       # Reset row start to 1
       row.start <- 1
     }

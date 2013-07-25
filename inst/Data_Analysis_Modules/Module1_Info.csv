@@ -1,7 +1,7 @@
 Instructor name:,Nicholas Carchedi,,,,,,,,,,,,,
 Course name:,Data Analysis,,,,,,,,,,,,,
 Module name:,Introduction to Data,,,,,,,,,,,,,
-Packages required for this module (separated by commas):,openintro,,,,,,,,,,,,,
+Packages required for this module (separated by commas):,"openintro, plotrix",,,,,,,,,,,,,
 Data sets required for this module (separated by commas):,cars,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,
