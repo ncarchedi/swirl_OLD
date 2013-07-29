@@ -514,13 +514,17 @@ findTroubleTags <- function(progressFilePath) {
     }
   }
   
-  rowFlagged <- qbegin[flags == TRUE] - 1
-  linesFlagged <- lines[rowFlagged]
-  splitLines <- strsplit(linesFlagged, " ")
-  
-  tags <- list()
-  for(i in 1:length(linesFlagged)) {
-    tags[[i]] <- paste(splitLines[[i]][3:length(splitLines[[i]])], collapse=" ")
+  if(any(flags==TRUE)) {
+    rowFlagged <- qbegin[flags == TRUE] - 1
+    linesFlagged <- lines[rowFlagged]
+    splitLines <- strsplit(linesFlagged, " ")
+    
+    tags <- list()
+    for(i in 1:length(linesFlagged)) {
+      tags[[i]] <- paste(splitLines[[i]][3:length(splitLines[[i]])], collapse=" ")
+    }
+  } else {
+    tags <- NA
   }
   
   # Return list of unique tags -- no duplicates

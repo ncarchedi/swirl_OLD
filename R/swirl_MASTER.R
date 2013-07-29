@@ -25,7 +25,7 @@ swirl <- function() {
     progress.file.name <- files[[2]]
     
     # Create master module list and get element number of starting module
-    master.module.list <- list("Module1") # Just one module for now
+    master.module.list <- list("Module1", "Module2")
     mod.num <- which(master.module.list==module.start)
     
     # Start running modules beginning with starting module
@@ -35,13 +35,26 @@ swirl <- function() {
       runModule(module.dir, module.name, row.start, progress.file.name)
       
       # Suggest topics to review
-      tags2Review <- findTroubleTags(progressFilePath=progress.file.name)
-      if(length(tags2Review) > 0) {
-        cat("\nIt appears that you struggled with the following topics:",
-            paste(tags2Review, collapse=", "))
+      if(file.exists(progress.file.name)) {
+        tags2Review <- findTroubleTags(progressFilePath=progress.file.name)
+        if(!identical(tags2Review, NA)) {
+          cat("\nIt appears that you struggled with the following topics:",
+              paste(tags2Review, collapse=" "))
+        }
       }
-      # Reset row start to 1
-      row.start <- 1
+      
+      # Ask user if they want to continue with next module, if it exists
+      if(i < length(master.module.list)) {
+        cat("\nWould you like to continue on with the next module?")
+        continue <- readline("\nANSWER: ")
+        if(isYes(continue)) {
+          # Reset row start to 1
+          row.start <- 1
+        } else {
+          cat("\nThanks for stopping by! Your progress has been saved....\n\n")
+          break
+        }        
+      }
     }
   }, interrupt = function(ex) {  # If user presses Esc key
     cat("\nThanks for stopping by! Your progress has been saved....\n\n")
