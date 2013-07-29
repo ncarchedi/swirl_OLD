@@ -16,10 +16,7 @@ question,Use the R-command 'sd(cars$price)' to calculate the standard deviation 
 question,"Now that you have calculated the standard deviation of this data, calculate the variance of the data.",command,,var(cars$price),Type in 'var(cars$price)' and press enter.,,,,variance,,,,,,
 video,Would you like to watch a short video that goes deeper into how variance and standard deviation are calculated? ,,,,,,,http://youtu.be/E4HAYd0QnRc,dispersion,,,,,,
 text,A low value for variance indicates that the data points tend to be located near the mean value; a high value for variance indicates that the data points are spread further from the mean.,,,,,,,,variance,,,,,,
-question,"In conclusion, three important measures of variability are which of the following: ",multiple,"mean, median, range
-spread, mean, central tendency
-variance, dispersion, spread 
-range, variance, standard deviation","range, variance, standard deviation",Look for the three specific terms that we focused on calculating. ,,,,dispersion,,,,,,
+question,"In conclusion, three important measures of variability are which of the following: ",multiple,"mean, median, range; spread, mean, central tendency; variance, dispersion, spread; range, variance, standard deviation","range, variance, standard deviation",Look for the three specific terms that we focused on calculating. ,,,,dispersion,,,,,,
 ,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,

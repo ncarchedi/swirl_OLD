@@ -459,8 +459,10 @@ runModule <- function(module.dir, module.name, row.start, progress.file.path,
     } else if(mod$Output.Type[i] == "question") {  ### QUESTION
       q <- mod$Output[i]
       ans.type <- mod$Answer.Type[i]
-      ch <- scan(text=mod$Choices[i], what=character(), sep="\n", quiet=TRUE)
-      correct.ans <- scan(text=mod$Correct.Answer[i], what=character(), sep="\n", quiet=TRUE)
+      ch <- scan(text=mod$Choices[i], what=character(), sep=";", quiet=TRUE,
+                 strip.white=TRUE)
+      correct.ans <- scan(text=mod$Correct.Answer[i], what=character(), sep=";",
+                          quiet=TRUE, strip.white=TRUE)
       h <- mod$Hint[i]
       # Measure time taken to get correct answer
       # Start the clock
