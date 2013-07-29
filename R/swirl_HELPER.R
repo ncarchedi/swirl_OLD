@@ -354,66 +354,92 @@ getUserFileNames <- function(username) {
 #' (Ex: "Module1")
 #' @param row.start numeric specifying on which row of the module to begin
 #' @param progress.file.path full file path of the user progress file
-runModule <- function(module.dir, module.name, row.start, progress.file.path) {  
-  # Determine file extention for current module info and content
-  mod.info.path <- file.path(module.dir, paste(module.name, "_Info.csv", sep=""))
+runModule <- function(module.dir, module.name, row.start, progress.file.path, 
+                      review=FALSE, tags=NA) {  
+  
+  # Determine file extention for current module
   mod.content.path <- file.path(module.dir, paste(module.name, ".csv", sep=""))
   
-  # Read in module info
-  mod.info <- read.csv(file=mod.info.path, colClasses="character",
-                       header=FALSE)[1:5,1:2]
-  # Read in character vector of package names
-  packages.as.chars <- unlist(strsplit(mod.info[4,2], ", ", fixed=T))
-  
-  # Load packages
-  for(package in packages.as.chars) {
-    suppressWarnings(suppressPackageStartupMessages(require(package, character.only=TRUE)))
-  }
-  
-  # Read in character vector of data sets needed for module
-  datasets.as.chars <- unlist(strsplit(mod.info[5,2], ", ", fixed=T))
-  data(list=datasets.as.chars, envir=.GlobalEnv)
-  
-  # Load content from csv file -- first 9 columns
-  mod <- read.csv(file=mod.content.path, colClasses="character")[,1:10]
-  
-  # Find end of content and trim empty rows after this
-  last.row <- max(which(mod$Output.Type != ""))
-  mod <- mod[1:last.row, ]
-  
-  # If starting after user was supposed to define variable, define it for them
-  loc <- grep("<-", mod$Correct.Answer)  # Find locations of assignment among correct answers in module
-  if(length(loc) > 0) {
-    for(row in loc) {
-      # For each assignment, execute make global and execute so variable available for user by user
-      if(row.start > row)  {
-        assignment <- scan(text=mod$Correct.Answer[row], what=character(), sep="\n", quiet=TRUE)
-        new.str.ans <- sub("<-", "<<-", assignment)
-        eval(parse(text=new.str.ans))
-      }
+  ### Do all of these next things only if this is not a module review
+  if(review == FALSE) {
+    # Determine file extension for current module info
+    mod.info.path <- file.path(module.dir, paste(module.name, "_Info.csv", sep=""))
+    
+    # Read in module info
+    mod.info <- read.csv(file=mod.info.path, colClasses="character",
+                         header=FALSE)[1:5,1:2]
+    # Read in character vector of package names
+    packages.as.chars <- unlist(strsplit(mod.info[4,2], ", ", fixed=T))
+    
+    # Load packages
+    for(package in packages.as.chars) {
+      suppressWarnings(suppressPackageStartupMessages(require(package, character.only=TRUE)))
     }
-  }
-  
-  # Also if current row not a new figure, bring up the last "new" figure
-  # plus "additions" in case needed for upcoming question
-  if(mod$Figure[row.start]=="" | mod$Figure.Type[row.start]=="addition") {
-    fig.loc <- which(mod$Figure != "")  # Find locations of figures in module
-    if(length(fig.loc) > 0) {
-      if(row.start > min(fig.loc)) {
-        new.plot.row <- lastNewFigRow(mod, row.start)
-        sub.fig.loc <- fig.loc[fig.loc >= new.plot.row & fig.loc <= row.start]
-        for(row in sub.fig.loc) {
-          fig.path <- file.path(module.dir, "Figures", mod$Figure[row])
-          source(file=fig.path, local=TRUE)
+    
+    # Read in character vector of data sets needed for module
+    datasets.as.chars <- unlist(strsplit(mod.info[5,2], ", ", fixed=T))
+    data(list=datasets.as.chars, envir=.GlobalEnv)
+    
+    # Load content from csv file -- first 10 columns
+    mod <- read.csv(file=mod.content.path, colClasses="character")[,1:10]
+    
+    # Find end of content and trim empty rows after this
+    last.row <- max(which(mod$Output.Type != ""))
+    mod <- mod[1:last.row, ]
+    
+    # If starting after user was supposed to define variable, define it for them
+    loc <- grep("<-", mod$Correct.Answer)  # Find locations of assignment among correct answers in module
+    if(length(loc) > 0) {
+      for(row in loc) {
+        # For each assignment, execute make global and execute so variable available for user by user
+        if(row.start > row)  {
+          assignment <- scan(text=mod$Correct.Answer[row], what=character(), sep="\n", quiet=TRUE)
+          new.str.ans <- sub("<-", "<<-", assignment)
+          eval(parse(text=new.str.ans))
         }
-        cat("\nI'm displaying the previous plot in case you need to refer back to it.\n")
       }
     }
-  }
-  
-  # Print module number to progress file if starting from beginning
-  if(row.start==1) {
-    cat(module.name, "\n", file=progress.file.path, append=TRUE)
+    
+    # Also if current row not a new figure, bring up the last "new" figure
+    # plus "additions" in case needed for upcoming question
+    if(mod$Figure[row.start]=="" | mod$Figure.Type[row.start]=="addition") {
+      fig.loc <- which(mod$Figure != "")  # Find locations of figures in module
+      if(length(fig.loc) > 0) {
+        if(row.start > min(fig.loc)) {
+          new.plot.row <- lastNewFigRow(mod, row.start)
+          sub.fig.loc <- fig.loc[fig.loc >= new.plot.row & fig.loc <= row.start]
+          for(row in sub.fig.loc) {
+            fig.path <- file.path(module.dir, "Figures", mod$Figure[row])
+            source(file=fig.path, local=TRUE)
+          }
+          cat("\nI'm displaying the previous plot in case you need to refer back to it.\n")
+        }
+      }
+    }
+    
+    # Print module number to progress file if starting from beginning
+    if(row.start==1) {
+      cat(module.name, "\n", file=progress.file.path, append=TRUE)
+    }
+    
+    ### This is only run if a module review
+  } else {
+    # Load content from csv file -- first 10 columns
+    mod <- read.csv(file=mod.content.path, colClasses="character")[,1:10]
+    
+    # Find end of content and trim empty rows after this
+    last.row <- max(which(mod$Output.Type != ""))
+    mod <- mod[1:last.row, ]
+    
+    # Now find indexes of all rows with tags of interest
+    tagIndex <- which(mod$Tag %in% tags == TRUE)
+    
+    # Reassign subset of module to mod variable
+    mod <- mod[tagIndex, ]
+    
+    if(row.start==1) {
+      cat("REVIEW\n", file=progress.file.path, append=TRUE)
+    }
   }
   
   ### Read content from table

@@ -36,10 +36,18 @@ swirl <- function() {
       
       # Suggest topics to review
       if(file.exists(progress.file.name)) {
-        tags2Review <- findTroubleTags(progressFilePath=progress.file.name)
-        if(!identical(tags2Review, NA)) {
+        taggedTopics <- findTroubleTags(progressFilePath=progress.file.name)
+        if(!identical(taggedTopics, NA)) {
           cat("\nIt appears that you struggled with the following topics:",
-              paste(tags2Review, collapse=", "), "\n")
+              paste(taggedTopics, collapse=", "), "\n")
+          cat("\nWhich of these topics would you like to review?\n")
+          options <- c(taggedTopics, "I'm good to go!")
+          tags2Review <- select.list(options, multiple=TRUE)
+          
+          # Run module in review mode for tags of interest
+          runModule(module.dir, module.name, row.start=1, progress.file.name,
+                    review=TRUE, tags=tags2Review)
+          cat("\nYou've completed your review for the topics you selected!\n")
         }
       }
       
