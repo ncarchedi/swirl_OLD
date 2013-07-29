@@ -39,7 +39,7 @@ swirl <- function() {
         tags2Review <- findTroubleTags(progressFilePath=progress.file.name)
         if(!identical(tags2Review, NA)) {
           cat("\nIt appears that you struggled with the following topics:",
-              paste(tags2Review, collapse=" "))
+              paste(tags2Review, collapse=", "), "\n")
         }
       }
       

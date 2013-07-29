@@ -413,7 +413,7 @@ runModule <- function(module.dir, module.name, row.start, progress.file.path) {
   
   # Print module number to progress file if starting from beginning
   if(row.start==1) {
-    cat(module.name, "\n", file=progress.file.path)
+    cat(module.name, "\n", file=progress.file.path, append=TRUE)
   }
   
   ### Read content from table
@@ -487,6 +487,14 @@ email2username <- function(email) {
 #' struggled
 findTroubleTags <- function(progressFilePath) {
   lines <- readLines(progressFilePath)
+  
+  # Find beginning of current module
+  modBegin <- grep("Module[0-9]+", lines)
+  modBegin <- ifelse(length(modBegin) > 0, max(modBegin), 1)
+  
+  # Get rid of everything in variable lines that comes before current module
+  lines <- lines[modBegin:length(lines)]
+  
   qbegin <- grep("output.type question", lines, fixed=TRUE)
   newRows <- grep("row[0-9]+", lines)
   qend <- c(rep(NA, length(qbegin)))
@@ -528,5 +536,5 @@ findTroubleTags <- function(progressFilePath) {
   }
   
   # Return list of unique tags -- no duplicates
-  return(unique(tags))
+  return(unlist(unique(tags)))
 }

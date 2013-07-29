@@ -13,13 +13,13 @@ text,"Mathematically, VARIANCE is the average of the squared differences from th
 text,The standard deviation can be calculated by taking the square root of the variance and vice versa.,,,,,,,,standard deviation,,,,,,
 text,"To Statisticians, the standard deviation is a more conventional measure of variability because it is expressed in the same units as the original data values.",,,,,,,,standard deviation,,,,,,
 question,Use the R-command 'sd(cars$price)' to calculate the standard deviation of the car prices.,command,,sd(cars$price),Type in 'sd(cars$price)' and press enter.,,,,standard deviation,,,,,,
-question,"Now that you have calculated the standard deviation of this data, calculate the variance of the data.",exact,,132.3984,Variance is the standard deviation squared.,,,,variance,,,,,,
+question,"Now that you have calculated the standard deviation of this data, calculate the variance of the data.",command,,var(cars$price),Type in 'var(cars$price)' and press enter.,,,,variance,,,,,,
 video,Would you like to watch a short video that goes deeper into how variance and standard deviation are calculated? ,,,,,,,http://youtu.be/E4HAYd0QnRc,dispersion,,,,,,
 text,A low value for variance indicates that the data points tend to be located near the mean value; a high value for variance indicates that the data points are spread further from the mean.,,,,,,,,variance,,,,,,
-question,"In conclusion, three important measures of variability are which of the following: ",multiple,"1. mean, median, range
-2. spread, mean, central tendency
-3. variance, dispersion, spread 
-4. range, variance, standard deviation","range, variance, standard deviation",Look for the three specific terms that we focused on calculating. ,,,,dispersion,,,,,,
+question,"In conclusion, three important measures of variability are which of the following: ",multiple,"mean, median, range
+spread, mean, central tendency
+variance, dispersion, spread 
+range, variance, standard deviation","range, variance, standard deviation",Look for the three specific terms that we focused on calculating. ,,,,dispersion,,,,,,
 ,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,
