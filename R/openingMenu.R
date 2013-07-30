@@ -87,8 +87,8 @@ openingMenu <- function() {
     
     if (password == "swirladmin") {
       
-      cat("\nWelcome, Mr. or Mrs. Important. On which course would you like to begin?")
-      course.start <- readline("\nANSWER: ")
+      cat("\nWelcome, Mr. or Mrs. Important!")
+      course.start <- chooseCourse(progress.file.path)
       cat("\nOn which module would you like to begin?")
       module.start <- readline("\nANSWER: ")
       cat("\nAnd which row of the content table would you like to start on?")
@@ -97,6 +97,10 @@ openingMenu <- function() {
       # Use default admin file names
       username <- "admin"
       user.files <- getUserFileNames(username)
+      
+      # Write course name and module name to top of NEW progress file
+      cat("COURSENAME ", course.start[[2]], "\n", sep="", file=user.files[[2]])
+      cat(module.start, "\n", sep="", file=user.files[[2]], append=TRUE)
       
       # Send back to openingMenu if wrong password
     } else {  
