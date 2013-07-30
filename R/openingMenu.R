@@ -4,9 +4,10 @@
 #' location, including module name and row number.
 #' 
 #' @return List containing the starting module name, row number, and full paths
-#' of both the user info and user progress files. Note that the return value is 
-#' a list with three elements, the third of which is a list itself with two
-#' elements.
+#' of both the user info and user progress files, as well as a list of course
+#' directory name and course name. Note that the return value is 
+#' a list with four elements, the third and fourth of which are lists with two
+#' elements each.
 openingMenu <- function() {  
   cat("\n\nPlease select the option below that applies to you:\n")
   status.choices <- c("I'm an existing user!", "This is my first time!", "I'm just a boring admin...")
@@ -24,17 +25,15 @@ openingMenu <- function() {
     # Check if user info and progress files exist
     if(all(file.exists(user.file.path, progress.file.path))) {
       # Get user info from saved user_info text file
-      user.info <- scan(file=user.file.path, what=character(), quiet=TRUE)
+      user.info <- readLines(user.file.path, warn=FALSE)
       user.name <- user.info[1]
       user.email <- user.info[2]
       
-      # Get progress from progress file
-      progress <- scan(file=progress.file.path, what=character(), quiet=TRUE)
-      module.start <- progress[1]
-      # Find number of last row
-      index <- max(grep("row", progress))
-      row.as.string <- progress[index]
-      row.start <- as.numeric(gsub("\\D", "", row.as.string))
+      userLeftOff <- findUserLocation(progress.file.path)
+      
+      course.start <- userLeftOff[[1]]  # List of course dir name and course name
+      module.start <- userLeftOff[[2]]
+      row.start <- userLeftOff[[3]]
       
       cat("\nWelcome back, ", user.name, "! It's great to see you again. Would you like to begin where you left off?\n\n", sep="")
       resp <- readline("ANSWER: ")
@@ -45,6 +44,7 @@ openingMenu <- function() {
         if(isYes(resp)) {
           module.start <- "Module1"
           row.start <- 1
+          course.start <- chooseCourse(progress.file.path) # Course dir name and course name
         }
       }
     } else {  # If can't locate records for user
@@ -53,6 +53,7 @@ openingMenu <- function() {
       module.start <- start[[1]]
       row.start <- start[[2]]
       user.files <- start[[3]]
+      course.start <- start[[4]]
     }
     
   } else if (status == status.choices[2]) {  ### NEW USER
@@ -65,9 +66,12 @@ openingMenu <- function() {
       module.start <- start[[1]]
       row.start <- start[[2]]
       user.files <- start[[3]]
+      course.start <- start[[4]]
     } else {
       module.start <- "Module1"
       row.start <- 1
+      progress.file.path <- user.files[[2]]
+      course.start <- chooseCourse(progress.file.path) # Course dir name and course name
       
       # Quick housekeeping items
       cat("\nGreat! Let's cover a couple of quick housekeeping items before we begin our first lesson.\n")
@@ -82,7 +86,10 @@ openingMenu <- function() {
     password <- readline("\nPASSWORD: ")
     
     if (password == "swirladmin") {
-      cat("\nWelcome, Mr. or Mrs. Important. On which module would you like to begin?")
+      
+      cat("\nWelcome, Mr. or Mrs. Important. On which course would you like to begin?")
+      course.start <- readline("\nANSWER: ")
+      cat("\nOn which module would you like to begin?")
       module.start <- readline("\nANSWER: ")
       cat("\nAnd which row of the content table would you like to start on?")
       row.start <- as.numeric(readline("\nANSWER: "))
@@ -98,7 +105,8 @@ openingMenu <- function() {
       module.start <- start[[1]]
       row.start <- start[[2]]
       user.files <- start[[3]]
+      course.start <- start[[4]]
     }
   }
-  return(list(module.start, row.start, user.files))
+  return(list(module.start, row.start, user.files, course.start))
 }

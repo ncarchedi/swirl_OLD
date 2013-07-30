@@ -10,8 +10,6 @@
 #' @author Nicholas A. Carchedi
 swirl <- function() {
   tryCatch({
-    ##### SET DIRECTORY WHERE MODULES OF INTEREST ARE LOCATED #####
-    module.dir <- file.path(path.package("swirl"), "Data_Analysis_Modules")
     
     # Run openingMenu, which returns module name and row number on which to begin
     cat("\nWelcome! My name is Swirl and I'll be your host today!")
@@ -21,18 +19,26 @@ swirl <- function() {
     
     # Set names of files where user info and progress can be found
     files <- unlist(start[[3]])
-    user.info.file.name <- files[[1]]
-    progress.file.name <- files[[2]]
+    user.info.file.name <- files[1]
+    progress.file.name <- files[2]
+    
+    course.start <- start[[4]][[1]]  # This is the course directory name
+    courseName <- start[[4]][[2]] # This is the actual name of the course
+    
+    ##### SET DIRECTORY WHERE MODULES OF INTEREST ARE LOCATED #####
+    course.dir <- file.path(path.package("swirl"), course.start)
     
     # Create master module list and get element number of starting module
-    master.module.list <- list("Module1", "Module2")
+    modules <- dir(course.dir, pattern="[a-zA-Z]+[0-9]+\\.csv")
+    master.module.list <- gsub(".csv", "", as.list(modules))
     mod.num <- which(master.module.list==module.start)
     
     # Start running modules beginning with starting module
     for(i in mod.num:length(master.module.list)) {
       # Run module i
       module.name <- master.module.list[[i]]
-      runModule(module.dir, module.name, row.start, progress.file.name)
+      runModule(course.dir, module.name, row.start, progress.file.name, 
+                courseName=courseName)
       
       # Suggest topics to review
       if(file.exists(progress.file.name)) {
@@ -44,10 +50,12 @@ swirl <- function() {
           options <- c(taggedTopics, "I'm good to go!")
           tags2Review <- select.list(options, multiple=TRUE)
           
-          # Run module in review mode for tags of interest
-          runModule(module.dir, module.name, row.start=1, progress.file.name,
-                    review=TRUE, tags=tags2Review)
-          cat("\nYou've completed your review for the topics you selected!\n")
+          if(!identical(tags2Review, "I'm good to go!")) {
+            # Run module in review mode for tags of interest
+            runModule(course.dir, module.name, row.start=1, progress.file.name,
+                      review=TRUE, tags=tags2Review)
+            cat("\nYou've completed your review for the topics you selected!\n")
+          }
         }
       }
       

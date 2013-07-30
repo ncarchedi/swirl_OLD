@@ -355,7 +355,7 @@ getUserFileNames <- function(username) {
 #' @param row.start numeric specifying on which row of the module to begin
 #' @param progress.file.path full file path of the user progress file
 runModule <- function(module.dir, module.name, row.start, progress.file.path, 
-                      review=FALSE, tags=NA) {  
+                      review=FALSE, tags=NA, courseName) {  
   
   # Determine file extention for current module
   mod.content.path <- file.path(module.dir, paste(module.name, ".csv", sep=""))
@@ -417,9 +417,14 @@ runModule <- function(module.dir, module.name, row.start, progress.file.path,
       }
     }
     
-    # Print module number to progress file if starting from beginning
+    # Print course name to progress file if starting on first row of first module
+    if(row.start==1 & module.name=="Module1") {
+      cat("COURSENAME ", courseName, "\n", sep="", file=progress.file.path, append=TRUE)
+    }
+    
+    # Print module name to progress file if starting on first row
     if(row.start==1) {
-      cat(module.name, "\n", file=progress.file.path, append=TRUE)
+      cat(module.name, "\n", sep="", file=progress.file.path, append=TRUE)
     }
     
     ### This is only run if a module review
@@ -507,6 +512,8 @@ email2username <- function(email) {
   return(username)
 }
 
+#' Find trouble tags
+#' 
 #' Reviews user progress file for questions that the user struggled with and
 #' returns a list of tags associated with those questions
 #' 
@@ -565,4 +572,57 @@ findTroubleTags <- function(progressFilePath) {
   
   # Return list of unique tags -- no duplicates
   return(unlist(unique(tags)))
+}
+
+#' Choose course to begin
+#' 
+#' Prompts the user to choose the course they would like to take and returns the
+#' corresponding directory name.
+#' 
+#' @return courseDirName directory name for chosen course
+chooseCourse <- function(progress.file.path) {
+  courseList <- c("Data Analysis", "Open Intro")
+  
+  cat("\nWhich course would you like to take?\n")
+  courseName <- select.list(courseList)
+  
+  courseDirName <- switch(courseName,
+                          "Data Analysis" = "Data_Analysis_Modules",
+                          "Open Intro" = "Open_Intro_Modules")
+  
+  return(list(courseDirName, courseName))
+}
+
+#' Find current course, module, and row
+#' 
+#' Given the file path for user's progress file, this function returns a list
+#' containing the current course, module, and row of content for that user.
+#' 
+#' @param progressFilePath Complete file path for user's progress file
+#' @return currentLocation List containing current course directory name,
+#' course name, module, and row, respectively
+findUserLocation <- function(progress.file.path) {
+  
+  # Get progress from progress file
+  progress <- readLines(progress.file.path, warn=FALSE)
+  
+  # Find current course name
+  courseStartIndex <- max(grep("COURSENAME", progress))
+  course.start <- gsub("COURSENAME ", "", progress[courseStartIndex])
+  courseDirName <- switch(course.start,
+                          "Data Analysis" = "Data_Analysis_Modules",
+                          "Open Intro" = "Open_Intro_Modules")
+  
+  # Find current module
+  modStartIndex <- max(grep("Module[0-9]+", progress))
+  module.start <- progress[modStartIndex]
+  
+  # Find number of last row
+  index <- max(grep("row", progress))
+  row.as.string <- progress[index]
+  row.start <- as.numeric(gsub("\\D", "", row.as.string))
+  
+  currentLocation <- list(list(courseDirName, course.start), module.start, row.start)
+  
+  return(currentLocation)
 }
