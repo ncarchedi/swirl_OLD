@@ -10,7 +10,8 @@
 #' elements each.
 openingMenu <- function() {  
   cat("\n\nPlease select the option below that applies to you:\n")
-  status.choices <- c("I'm an existing user!", "This is my first time!", "I'm just a boring admin...")
+  status.choices <- c("I'm an existing user!", "This is my first time!", 
+                      "I'm just a boring admin...")
   status <- select.list(choices=status.choices)
   
   if (status == status.choices[1]) {  ### EXISTING USER

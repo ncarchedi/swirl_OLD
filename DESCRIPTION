@@ -15,3 +15,5 @@ Collate:
     'swirl_HELPER.R'
     'swirl_MASTER.R'
     'openingMenu.R'
+    'runModule.R'
+    'userInput.R'
