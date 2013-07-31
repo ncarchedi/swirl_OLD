@@ -3,7 +3,8 @@
 \title{Runs module}
 \usage{
   runModule(module.dir, module.name, row.start,
-    progress.file.path)
+    progress.file.path, review = FALSE, tags = NA,
+    courseName)
 }
 \arguments{
   \item{module.dir}{full path of directory where module is

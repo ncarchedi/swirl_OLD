@@ -87,7 +87,7 @@ openingMenu <- function() {
     
     if (password == "swirladmin") {
       
-      cat("\nWelcome, Mr. or Mrs. Important!")
+      cat("\nWelcome, Mr. or Mrs. Important!\n")
       course.start <- chooseCourse(progress.file.path)
       cat("\nOn which module would you like to begin?")
       module.start <- readline("\nANSWER: ")

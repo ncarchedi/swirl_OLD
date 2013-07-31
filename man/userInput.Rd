@@ -25,6 +25,10 @@
   \item{progress.file.path}{full file path to file where
   progress is recorded}
 }
+\value{
+  strikes number of incorrect responses before getting
+  correct response
+}
 \description{
   Solicits a response from user depending on the type of
   question specified. Also writes corresponding progress

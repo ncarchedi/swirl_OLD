@@ -33,8 +33,12 @@ recordIsCorrect <- function(is.correct, text.file.path) {
 #' @param correct character string representing the correct answer
 #' @param hint character string of hint to be shown to user after incorrect response
 #' @param progress.file.path full file path to file where progress is recorded
+#' @return strikes number of incorrect responses before getting correct response
 userInput <- function(question, type=c("exact", "range", "text", "command", "multiple"), 
                       choices="", correct, hint="", progress.file.path) {
+  # Initialize strikes to zero
+  strikes <- 0
+  
   # Print question
   cat("\n", question, sep="")
   
@@ -48,6 +52,7 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
       if(str.ans == "Swirl" | str.ans == "swirl()") {
         tryAgain(hint)
         recordIsCorrect(is.correct=FALSE, text.file.path=progress.file.path)
+        strikes <- strikes + 1
         cat("\n\n", question, sep="")
         
       } else if(str.ans != "") {
@@ -70,6 +75,7 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
         } else {
           tryAgain(hint)
           recordIsCorrect(is.correct=FALSE, text.file.path=progress.file.path)
+          strikes <- strikes + 1
         }
       } else {
         cat("\nPlease enter a response!")
@@ -84,6 +90,7 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
       if(str.ans == "Swirl" | str.ans == "swirl()") {
         tryAgain(hint)
         recordIsCorrect(is.correct=FALSE, text.file.path=progress.file.path)
+        strikes <- strikes + 1
         cat("\n\n", question, sep="")
         
       } else if(str.ans != "") {
@@ -109,6 +116,7 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
         } else {
           tryAgain(hint)
           recordIsCorrect(is.correct=FALSE, text.file.path=progress.file.path)
+          strikes <- strikes + 1
         }
       } else {
         cat("\nPlease enter a response!")
@@ -123,6 +131,7 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
       if(str.ans == "Swirl" | str.ans == "swirl()") {
         tryAgain(hint)
         recordIsCorrect(is.correct=FALSE, text.file.path=progress.file.path)
+        strikes <- strikes + 1
         cat("\n\n", question, sep="")
         
       } else if(str.ans != "") {
@@ -141,6 +150,7 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
         } else {
           tryAgain(hint)
           recordIsCorrect(is.correct=FALSE, text.file.path=progress.file.path)
+          strikes <- strikes + 1
         }
       } else {
         cat("\nPlease enter a response!")
@@ -155,6 +165,7 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
       if(str.ans == "Swirl" | str.ans == "swirl()") {
         tryAgain(hint)
         recordIsCorrect(is.correct=FALSE, text.file.path=progress.file.path)
+        strikes <- strikes + 1
         cat("\n\n", question, sep="")
         
       } else if(str.ans != "") {
@@ -181,6 +192,7 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
         } else {
           tryAgain(hint)
           recordIsCorrect(is.correct=FALSE, text.file.path=progress.file.path)
+          strikes <- strikes + 1
         }
       } else {
         cat("\nPlease enter a response!")
@@ -201,9 +213,11 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
       } else {
         tryAgain(hint)
         recordIsCorrect(is.correct=FALSE, text.file.path=progress.file.path)
+        strikes <- strikes + 1
       }
     }
   }
+  return(strikes)
 }
 
 #' Determines whether yes or no
@@ -380,8 +394,8 @@ runModule <- function(module.dir, module.name, row.start, progress.file.path,
     datasets.as.chars <- unlist(strsplit(mod.info[5,2], ", ", fixed=T))
     data(list=datasets.as.chars, envir=.GlobalEnv)
     
-    # Load content from csv file -- first 10 columns
-    mod <- read.csv(file=mod.content.path, colClasses="character")[,1:10]
+    ### Load content from csv file
+    mod <- read.csv(file=mod.content.path, colClasses="character")
     
     # Find end of content and trim empty rows after this
     last.row <- max(which(mod$Output.Type != ""))
@@ -429,8 +443,8 @@ runModule <- function(module.dir, module.name, row.start, progress.file.path,
     
     ### This is only run if a module review
   } else {
-    # Load content from csv file -- first 10 columns
-    mod <- read.csv(file=mod.content.path, colClasses="character")[,1:10]
+    # Load content from csv file -- first 11 columns
+    mod <- read.csv(file=mod.content.path, colClasses="character")
     
     # Find end of content and trim empty rows after this
     last.row <- max(which(mod$Output.Type != ""))
@@ -462,21 +476,41 @@ runModule <- function(module.dir, module.name, row.start, progress.file.path,
       readline("\n...")
       
     } else if(mod$Output.Type[i] == "question") {  ### QUESTION
-      q <- mod$Output[i]
-      ans.type <- mod$Answer.Type[i]
-      ch <- scan(text=mod$Choices[i], what=character(), sep=";", quiet=TRUE,
-                 strip.white=TRUE)
-      correct.ans <- scan(text=mod$Correct.Answer[i], what=character(), sep=";",
-                          quiet=TRUE, strip.white=TRUE)
-      h <- mod$Hint[i]
-      # Measure time taken to get correct answer
-      # Start the clock
-      ptm <- proc.time()
-      userInput(question=q, type=ans.type, choices=ch, correct=correct.ans, hint=h,
-                progress.file.path)
-      # Record time taken - total elapsed time used
-      time.on.question <- proc.time() - ptm
-      cat("time.on.question", time.on.question[3], "\n", sep=" ", file=progress.file.path, append=TRUE)
+      # Skip question of it's optional and the user was not flagged on last one
+      if(mod$Status[i] == "optional" && proceed2Mandatory == TRUE) {
+        next
+      } else {
+        q <- mod$Output[i]
+        ans.type <- mod$Answer.Type[i]
+        ch <- scan(text=mod$Choices[i], what=character(), sep=";", quiet=TRUE,
+                   strip.white=TRUE)
+        correct.ans <- scan(text=mod$Correct.Answer[i], what=character(), sep=";",
+                            quiet=TRUE, strip.white=TRUE)
+        h <- mod$Hint[i]
+        # Measure time taken to get correct answer
+        # Start the clock
+        ptm <- proc.time()
+        strikes <- userInput(question=q, type=ans.type, choices=ch, 
+                             correct=correct.ans, hint=h, progress.file.path)
+        # Record time taken - total elapsed time used
+        time.on.question <- proc.time() - ptm
+        cat("time.on.question", time.on.question[3], "\n", sep=" ", 
+            file=progress.file.path, append=TRUE)
+        
+        # If user gets question wrong 3 or more times then flag it in progress file
+        # and go on to next row of content as usual
+        
+        if(strikes >= 3) {
+          cat("flagged\n", file=progress.file.path, append=TRUE)
+          proceed2Mandatory <- FALSE
+          
+          # If user does not get flagged on question, then signal to proceed to next
+          # mandatory question
+          
+        } else {
+          proceed2Mandatory <- TRUE
+        }
+      }
       
     } else if(mod$Output.Type[i] == "figure") {  ### FIGURE
       cat("\n", mod$Output[i], sep="")
