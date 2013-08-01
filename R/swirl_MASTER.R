@@ -11,12 +11,6 @@
 swirl <- function() {
   tryCatch({
     
-    # Run openingMenu, which returns module name and row number on which to begin
-    cat("\nWelcome! My name is Swirl and I'll be your host today!")
-    start <- openingMenu()
-    module.start <- start[[1]]  # Character string
-    row.start <- start[[2]]  # Numeric
-    
     # Define user data directory path
     userDataPath <- file.path(path.package("swirl"), "user_data")
     
@@ -24,6 +18,12 @@ swirl <- function() {
     if(!file.exists(userDataPath)) {
       dir.create(userDataPath)
     }
+    
+    # Run openingMenu, which returns module name and row number on which to begin
+    cat("\nWelcome! My name is Swirl and I'll be your host today!")
+    start <- openingMenu()
+    module.start <- start[[1]]  # Character string
+    row.start <- start[[2]]  # Numeric
     
     # Set names of files where user info and progress can be found
     files <- unlist(start[[3]])
