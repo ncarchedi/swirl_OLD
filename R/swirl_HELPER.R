@@ -158,11 +158,6 @@ getUserFileNames <- function(username) {
   # Define user data directory path
   userDataPath <- file.path(path.package("swirl"), "user_data")
   
-  # Check if user_data folder exists and if not, create it
-  if(!file.exists(userDataPath)) {
-    dir.create(userDataPath)
-  }
-  
   # Define user data file paths
   user.info.file.path <- file.path(userDataPath, paste(username,"_info.txt", sep=""))
   progress.file.path <- file.path(userDataPath, paste(username,"_progress.txt", sep=""))

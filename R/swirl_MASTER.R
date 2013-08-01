@@ -17,6 +17,14 @@ swirl <- function() {
     module.start <- start[[1]]  # Character string
     row.start <- start[[2]]  # Numeric
     
+    # Define user data directory path
+    userDataPath <- file.path(path.package("swirl"), "user_data")
+    
+    # Check if user_data directory exists and if not, create it
+    if(!file.exists(userDataPath)) {
+      dir.create(userDataPath)
+    }
+    
     # Set names of files where user info and progress can be found
     files <- unlist(start[[3]])
     user.info.file.name <- files[1]
