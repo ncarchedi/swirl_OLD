@@ -155,8 +155,18 @@ storeUserInfo <- function() {
 #' @return List containing the expected full file paths of the user info file 
 #' and user progress file, respectively
 getUserFileNames <- function(username) {
-  user.info.file.path <- file.path(path.package("swirl"), "user_data", paste(username,"_info.txt", sep=""))
-  progress.file.path <- file.path(path.package("swirl"), "user_data", paste(username,"_progress.txt", sep=""))
+  # Define user data directory path
+  userDataPath <- file.path(path.package("swirl"), "user_data")
+  
+  # Check if user_data folder exists and if not, create it
+  if(!file.exists(userDataPath)) {
+    dir.create(userDataPath)
+  }
+  
+  # Define user data file paths
+  user.info.file.path <- file.path(userDataPath, paste(username,"_info.txt", sep=""))
+  progress.file.path <- file.path(userDataPath, paste(username,"_progress.txt", sep=""))
+  
   return(list(user.info.file.path, progress.file.path))
 }
 
