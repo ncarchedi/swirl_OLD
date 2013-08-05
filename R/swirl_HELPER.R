@@ -247,12 +247,14 @@ findTroubleTags <- function(progressFilePath) {
 #' 
 #' @return courseDirName directory name for chosen course
 chooseCourse <- function(progress.file.path) {
-  courseList <- c("Data Analysis", "Open Intro")
+  courseList <- c("Mathematical Biostatistics Boot Camp 2", 
+                  "Data Analysis", "Open Intro")
   
   cat("\nWhich course would you like to take?\n")
   courseName <- select.list(courseList)
   
   courseDirName <- switch(courseName,
+                          "Mathematical Biostatistics Boot Camp 2" = "Boot_Camp_Modules",
                           "Data Analysis" = "Data_Analysis_Modules",
                           "Open Intro" = "Open_Intro_Modules")
   
@@ -276,6 +278,7 @@ findUserLocation <- function(progress.file.path) {
   courseStartIndex <- max(grep("COURSENAME", progress))
   course.start <- gsub("COURSENAME ", "", progress[courseStartIndex])
   courseDirName <- switch(course.start,
+                          "Mathematical Biostatistics Boot Camp 2" = "Boot_Camp_Modules",
                           "Data Analysis" = "Data_Analysis_Modules",
                           "Open Intro" = "Open_Intro_Modules")
   
