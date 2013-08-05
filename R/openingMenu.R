@@ -45,7 +45,7 @@ openingMenu <- function() {
         if(isYes(resp)) {
           module.start <- "Module1"
           row.start <- 1
-          course.start <- chooseCourse(progress.file.path) # Course dir name and course name
+          course.start <- chooseCourse() # Course dir name and course name
         }
       }
     } else {  # If can't locate records for user
@@ -72,7 +72,7 @@ openingMenu <- function() {
       module.start <- "Module1"
       row.start <- 1
       progress.file.path <- user.files[[2]]
-      course.start <- chooseCourse(progress.file.path) # Course dir name and course name
+      course.start <- chooseCourse() # Course dir name and course name
       
       # Quick housekeeping items
       cat("\nGreat! Let's cover a couple of quick housekeeping items before we begin our first lesson.\n")
@@ -89,7 +89,7 @@ openingMenu <- function() {
     if (password == "swirladmin") {
       
       cat("\nWelcome, Mr. or Mrs. Important!\n")
-      course.start <- chooseCourse(progress.file.path)
+      course.start <- chooseCourse()
       cat("\nOn which module would you like to begin?")
       module.start <- readline("\nANSWER: ")
       cat("\nAnd which row of the content table would you like to start on?")

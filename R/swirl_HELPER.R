@@ -243,20 +243,16 @@ findTroubleTags <- function(progressFilePath) {
 #' Choose course to begin
 #' 
 #' Prompts the user to choose the course they would like to take and returns the
-#' corresponding directory name.
+#' corresponding directory name and course name.
 #' 
-#' @return courseDirName directory name for chosen course
-chooseCourse <- function(progress.file.path) {
-  courseList <- c("Mathematical Biostatistics Boot Camp 2", 
-                  "Data Analysis", "Open Intro")
-  
+#' @return list containing directory name for chosen course and the course name
+chooseCourse <- function() {
+  courseDirList <- list.files(path=file.path(path.package("swirl"), "Courses"))
+  courseNames <- gsub("_", " ", courseDirList)
+                           
   cat("\nWhich course would you like to take?\n")
-  courseName <- select.list(courseList)
-  
-  courseDirName <- switch(courseName,
-                          "Mathematical Biostatistics Boot Camp 2" = "Boot_Camp_Modules",
-                          "Data Analysis" = "Data_Analysis_Modules",
-                          "Open Intro" = "Open_Intro_Modules")
+  courseName <- select.list(courseNames)
+  courseDirName <- file.path("Courses", gsub(" ", "_", courseName))
   
   return(list(courseDirName, courseName))
 }
@@ -277,10 +273,7 @@ findUserLocation <- function(progress.file.path) {
   # Find current course name
   courseStartIndex <- max(grep("COURSENAME", progress))
   course.start <- gsub("COURSENAME ", "", progress[courseStartIndex])
-  courseDirName <- switch(course.start,
-                          "Mathematical Biostatistics Boot Camp 2" = "Boot_Camp_Modules",
-                          "Data Analysis" = "Data_Analysis_Modules",
-                          "Open Intro" = "Open_Intro_Modules")
+  courseDirName <- file.path("Courses", gsub(" ", "_", course.start))
   
   # Find current module
   modStartIndex <- max(grep("Module[0-9]+", progress))
