@@ -166,6 +166,19 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
           praise()
           recordIsCorrect(is.correct=TRUE, text.file.path=progress.file.path)
           break
+        } else if(identical(gsub(" ", "", str.ans), gsub(" ", "", correct))) {
+          cat("\nDid you mean \'", correct, "\'?\n", sep="")
+          resp <- readline("\nANSWER: ")
+          if(isYes(resp)) {
+            eval(parse(text=gsub("<-", "<<-", correct)))
+            praise()
+            recordIsCorrect(is.correct=TRUE, text.file.path=progress.file.path)
+            break
+          } else {
+            tryAgain(hint)
+            recordIsCorrect(is.correct=FALSE, text.file.path=progress.file.path)
+            strikes <- strikes + 1
+          }
         } else {
           tryAgain(hint)
           recordIsCorrect(is.correct=FALSE, text.file.path=progress.file.path)
