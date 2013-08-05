@@ -77,7 +77,7 @@ openingMenu <- function() {
       # Quick housekeeping items
       cat("\nGreat! Let's cover a couple of quick housekeeping items before we begin our first lesson.\n")
       cat("\nFirst off, you should know that when you see '...', that means you should press Enter when you are done reading and ready to continue. Also, as you've probably figured out, when you see 'ANSWER:', that means it's your turn to enter a response, then press Enter to continue.")
-      cat("\n\nFinally, you'll notice a progress bar that shows you how far you've made it through the lesson. Remember you can stop at any time by pressing the Esc key and you're progress will be saved. Let's get started!")
+      cat("\n\nFinally, you'll notice a progress bar that shows you how far you've made it through the lesson. Remember you can stop at any time by pressing the Esc key and your progress will be saved. Let's get started!")
       readline("\n...  <-- That's your cue to press Enter to continue")
     }
     
