@@ -80,7 +80,7 @@ progressMarkers <- function(current.row, total.rows) {
   if(total.rows >= 10) {
     total.marks <- 10
     ticks <- round(total.rows/total.marks)
-    marks <- ceiling(current.row/ticks)
+    marks <- round(current.row/ticks)
     cat("PROGRESS: << ", rep("(X) ", marks), rep("( ) ", total.marks-marks), 
         ">> ", sep="")
   }

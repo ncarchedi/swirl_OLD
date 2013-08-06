@@ -45,7 +45,8 @@ swirl <- function() {
     for(i in mod.num:length(master.module.list)) {
       # Run module i
       module.name <- master.module.list[[i]]
-      runModule(course.dir, module.name, row.start, progress.file.name, 
+      runModule(module.dir=course.dir, module.name=module.name, 
+                row.start=row.start, progress.file.path=progress.file.name, 
                 courseName=courseName)
       
       # Suggest topics to review

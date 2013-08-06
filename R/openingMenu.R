@@ -8,7 +8,7 @@
 #' directory name and course name. Note that the return value is 
 #' a list with four elements, the third and fourth of which are lists with two
 #' elements each.
-openingMenu <- function() {  
+openingMenu <- function() {
   cat("\n\nPlease select the option below that applies to you:\n")
   status.choices <- c("I'm an existing user!", "This is my first time!", 
                       "I'm just a boring admin...")
