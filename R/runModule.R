@@ -28,6 +28,9 @@ runModule <- function(courseDir, module.name, row.start, progress.file.path,
     
     # Load packages
     for(package in packages.as.chars) {
+      if (!package %in% installed.packages()) {
+        install.packages(package, quiet=TRUE)
+      }
       suppressWarnings(suppressPackageStartupMessages(require(package, character.only=TRUE)))
     }
     
