@@ -2,12 +2,12 @@
 \alias{runModule}
 \title{Runs module}
 \usage{
-  runModule(module.dir, module.name, row.start,
+  runModule(courseDir, module.name, row.start,
     progress.file.path, review = FALSE, tags = NA,
     courseName)
 }
 \arguments{
-  \item{module.dir}{full path of directory where module is
+  \item{courseDir}{full path of directory where module is
   located}
 
   \item{module.name}{character string specifying the name

@@ -2,13 +2,15 @@
 \alias{chooseCourse}
 \title{Choose course to begin}
 \usage{
-  chooseCourse(progress.file.path)
+  chooseCourse()
 }
 \value{
-  courseDirName directory name for chosen course
+  list containing directory name for chosen course and the
+  course name
 }
 \description{
   Prompts the user to choose the course they would like to
-  take and returns the corresponding directory name.
+  take and returns the corresponding directory name and
+  course name.
 }
 

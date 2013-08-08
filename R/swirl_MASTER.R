@@ -1,10 +1,8 @@
 #' Runs the swirl program
 #' 
 #' This function is the main component of the swirl interactive learning 
-#' system. It gets all necessary information from the user and reads all 
-#' module content directly from the location specified by the user. When the
-#' user quits the program via the Esc key, all progress is saved so he 
-#' or she can resume their session at a later time.
+#' system. It gets all necessary information from the user to run the desired 
+#' modules and record the user's progress as he/she works through those modules.
 #' 
 #' @export
 #' @author Nicholas A. Carchedi
@@ -37,15 +35,15 @@ swirl <- function() {
     course.dir <- file.path(path.package("swirl"), course.start)
     
     # Create master module list and get element number of starting module
-    modules <- dir(course.dir, pattern="[a-zA-Z]+[0-9]+\\.csv")
-    master.module.list <- gsub(".csv", "", as.list(modules))
+    modules <- dir(course.dir, pattern="[a-zA-Z]+[0-9]+\\.rda")
+    master.module.list <- gsub(".rda", "", as.list(modules))
     mod.num <- which(master.module.list==module.start)
     
     # Start running modules beginning with starting module
     for(i in mod.num:length(master.module.list)) {
       # Run module i
       module.name <- master.module.list[[i]]
-      runModule(module.dir=course.dir, module.name=module.name, 
+      runModule(courseDir=course.dir, module.name=module.name, 
                 row.start=row.start, progress.file.path=progress.file.name, 
                 courseName=courseName)
       
@@ -61,7 +59,8 @@ swirl <- function() {
           
           if(!identical(tags2Review, "I'm good to go!")) {
             # Run module in review mode for tags of interest
-            runModule(course.dir, module.name, row.start=1, progress.file.name,
+            runModule(courseDir=course.dir, module.name=module.name, 
+                      row.start=1, progress.file.path=progress.file.name,
                       review=TRUE, tags=tags2Review)
             cat("\nYou've completed your review for the topics you selected!\n")
           }

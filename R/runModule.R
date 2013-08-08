@@ -2,27 +2,29 @@
 #' 
 #' Runs specified swirl module beginning at specified row.
 #' 
-#' @param module.dir full path of directory where module is located
+#' @param courseDir full path of directory where module is located
 #' @param module.name character string specifying the name of the module
 #' (Ex: "Module1")
 #' @param row.start numeric specifying on which row of the module to begin
 #' @param progress.file.path full file path of the user progress file
-runModule <- function(module.dir, module.name, row.start, progress.file.path, 
+runModule <- function(courseDir, module.name, row.start, progress.file.path, 
                       review=FALSE, tags=NA, courseName) {  
   
-  # Determine file extention for current module
-  mod.content.path <- file.path(module.dir, paste(module.name, ".csv", sep=""))
+  # Determine file extention for rda file
+  rdaPath <- file.path(courseDir, paste(module.name, ".rda", sep=""))
+  
+  # Load module content and info
+  load(rdaPath)
+  
+  # Change all NA to blanks for backwards compatability
+  mod[is.na(mod)] <- ""
+  mod.info[is.na(mod.info)] <- ""
   
   ### Do all of these next things only if this is not a module review
   if(review == FALSE) {
-    # Determine file extension for current module info
-    mod.info.path <- file.path(module.dir, paste(module.name, "_Info.csv", sep=""))
     
-    # Read in module info
-    mod.info <- read.csv(file=mod.info.path, colClasses="character",
-                         header=FALSE)[1:5,1:2]
     # Read in character vector of package names
-    packages.as.chars <- unlist(strsplit(mod.info[4,2], ", ", fixed=T))
+    packages.as.chars <- unlist(strsplit(mod.info[3,2], ", ", fixed=T))
     
     # Load packages
     for(package in packages.as.chars) {
@@ -30,11 +32,8 @@ runModule <- function(module.dir, module.name, row.start, progress.file.path,
     }
     
     # Read in character vector of data sets needed for module
-    datasets.as.chars <- unlist(strsplit(mod.info[5,2], ", ", fixed=T))
+    datasets.as.chars <- unlist(strsplit(mod.info[4,2], ", ", fixed=T))
     data(list=datasets.as.chars, envir=.GlobalEnv)
-    
-    ### Load content from csv file
-    mod <- read.csv(file=mod.content.path, colClasses="character")
     
     # Find end of content and trim empty rows after this
     last.row <- max(which(mod$Output.Type != ""))
@@ -62,7 +61,7 @@ runModule <- function(module.dir, module.name, row.start, progress.file.path,
           new.plot.row <- lastNewFigRow(mod, row.start)
           sub.fig.loc <- fig.loc[fig.loc >= new.plot.row & fig.loc <= row.start]
           for(row in sub.fig.loc) {
-            fig.path <- file.path(module.dir, "Figures", mod$Figure[row])
+            fig.path <- file.path(courseDir, "Figures", mod$Figure[row])
             source(file=fig.path, local=TRUE)
           }
           cat("\nI'm displaying the previous plot in case you need to refer back to it.\n")
@@ -82,8 +81,6 @@ runModule <- function(module.dir, module.name, row.start, progress.file.path,
     
     ### This is only run if a module review
   } else {
-    # Load content from csv file -- first 11 columns
-    mod <- read.csv(file=mod.content.path, colClasses="character")
     
     # Find end of content and trim empty rows after this
     last.row <- max(which(mod$Output.Type != ""))
@@ -115,6 +112,10 @@ runModule <- function(module.dir, module.name, row.start, progress.file.path,
       readline("\n...")
       
     } else if(mod$Output.Type[i] == "question") {  ### QUESTION
+      if(!exists("proceed2Mandatory")) {
+        proceed2Mandatory <- FALSE
+      }
+      
       # Skip question of it's optional and the user was not flagged on last one
       if(mod$Status[i] == "optional" && proceed2Mandatory == TRUE) {
         next
@@ -151,7 +152,7 @@ runModule <- function(module.dir, module.name, row.start, progress.file.path,
       
     } else if(mod$Output.Type[i] == "figure") {  ### FIGURE
       cat("\n", mod$Output[i], sep="")
-      fig.path <- file.path(module.dir, "Figures", mod$Figure[i])
+      fig.path <- file.path(courseDir, "Figures", mod$Figure[i])
       source(file=fig.path, local=TRUE)
       readline("\n...")
       
