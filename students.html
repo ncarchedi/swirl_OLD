@@ -18,8 +18,10 @@
         <header class="inner">
           <a id="forkme_banner" href="https://github.com/ncarchedi/swirl">View on GitHub</a>
 
-          <h1 id="project_title">swirl</h1>
-          <h2 id="project_tagline">Statistics with Interactive R Learning (An R Package)</h2>
+          <a href="http://ncarchedi.github.io/swirl">
+			<h1 id="project_title">swirl</h1>
+			<h2 id="project_tagline">Statistics with Interactive R Learning (An R Package)</h2>
+		  </a>
 
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/ncarchedi/swirl/zipball/master">Download this project as a .zip file</a>
@@ -39,7 +41,7 @@
 <h2>
 <a class="anchor"><span class="octicon octicon-link"></span></a>Step 1: Get R and RStudio
 </h2>
-<p>In order to run <strong>swirl</strong>, you must have R installed on your computer. In addition to R, it highly recommended that you install RStudio, which will make your experience with R much more enjoyable.
+<p>In order to run <strong>swirl</strong>, you must have R installed on your computer. In addition to R, it highly recommended that you install RStudio, which will make your experience with R much more enjoyable.</p>
 
 <p>If you need to install R, you can do so <a href="http://cran.rstudio.com/">here</a>.</p>
 
@@ -53,22 +55,32 @@
 <p>If you need to install RStudio, you can do so <a href="http://www.rstudio.com/ide/download/desktop">here</a>. You probably want the download located under the heading <strong>Recommended For Your System</strong>.</p>
 
 <h2>
-<a class="anchor"><span class="octicon octicon-link"></span></a>Step 2: Create a GitHub account
-</h2>
-
-<h2>
-<a class="anchor"><span class="octicon octicon-link"></span></a>Step 3: Download <strong>devtools</strong> package
+Step 2: Install <strong>devtools</strong> package
 </h2>
 <p>
-You'll need to get the <strong>devtools</strong> R package in order to download <strong>swirl</strong> directly from GitHub.
+Since <strong>swirl</strong> is still in development, you'll need to get the <strong>devtools</strong> R package in order to download it. Open RStudio (or just plain R if you don't have RStudio) and type the following into the console, pressing Enter after each line:
 </p>
+<p><code>> install.packages("devtools")</code></p>
+<p><code>> library("devtools")</code></p>
+<p>Note that the <code>></code> symbol at the beginning of each line is R's prompt for the user to type something into the console. We include it here so you know that these commands are to be typed into the console and not elsewhere. The part you type begins after <code>></code>.</p>
 
 <h2>
-<a class="anchor"><span class="octicon octicon-link"></span></a>Step 4: Download swirl!
+Step 3: Get swirl!
 </h2>
 <p>
-This is just sample text....
+Now that you have RStudio (or just plain R) up and running and you have successfully installed and loaded the <strong>devtools</strong> package, you are ready to get <strong>swirl</strong>! Type the following into the console and press Enter:
 </p>
+<p><code>> install_github(repo="swirl", username="ncarchedi")</code></p>
+
+<h2>
+Step 4: Start swirl and let the fun begin!
+</h2>
+<p>
+This is the only step that you will repeat every time you want to run <strong>swirl</strong>. First you will load the package using the <code>library</code> function, which you've already seen above. Then you will call the function that starts the magic! Type the following, pressing Enter after each line:
+<p><code>> library("swirl")</code></p>
+<p><code>> swirl()</code></p>
+
+<p>And you're off to the races! Please contact the authors of <strong>swirl</strong> if you have trouble completing any of these steps.
 
       </section>
     </div>
