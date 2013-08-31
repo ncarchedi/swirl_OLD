@@ -1,8 +1,8 @@
-\name{updateSwirl}
-\alias{updateSwirl}
-\title{Updates swirl package}
+\name{promptUpdate}
+\alias{promptUpdate}
+\title{Prompts user to update}
 \usage{
-  updateSwirl()
+  promptUpdate()
 }
 \description{
   Prompts user to update swirl package with warning that
