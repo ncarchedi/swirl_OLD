@@ -18,3 +18,4 @@ Collate:
     'runModule.R'
     'userInput.R'
     'saveModule.R'
+    'updateSwirl.R'

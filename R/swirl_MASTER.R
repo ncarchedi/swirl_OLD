@@ -9,6 +9,9 @@
 swirl <- function() {
   tryCatch({
     
+    # Prompt user to update swirl
+    updateSwirl()
+    
     # Define user data directory path
     userDataPath <- file.path(path.package("swirl"), "user_data")
     
