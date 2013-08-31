@@ -14,8 +14,7 @@ updateSwirl <- function() {
     cat("\nAre you sure you'd like to update swirl now and lose any progress you've made?\n\n")
     resp <- readline("ANSWER: ")
     if(isYes(resp)) {
-      cat("\nI'm updating swirl now!!!!\n")
-      #install_github(repo="swirl", username="ncarchedi")
+      install_github(repo="swirl", username="ncarchedi")
     } else {
       cat("\nNo problem! You will be prompted to update every time you start swirl.\n")
     }
