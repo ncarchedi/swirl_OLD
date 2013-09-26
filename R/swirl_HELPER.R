@@ -78,10 +78,10 @@ progressMarkers <- function(current.row, total.rows) {
   percent.complete <- round((current.row/total.rows)*100)
   cat("\n")
   if(total.rows >= 10) {
-    total.marks <- 10
-    ticks <- round(total.rows/total.marks)
-    marks <- round(current.row/ticks)
-    cat("PROGRESS: << ", rep("(X) ", marks), rep("( ) ", total.marks-marks), 
+    total.slots <- 10
+    ticks <- round(total.rows/total.slots)
+    marks <- ifelse(round(current.row/ticks) > 10, 10, round(current.row/ticks))
+    cat("PROGRESS: << ", rep("(X) ", marks), rep("( ) ", total.slots-marks), 
         ">> ", sep="")
   }
   cat("(", percent.complete, "% Complete)\n", sep="")
