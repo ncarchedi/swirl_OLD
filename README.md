@@ -4,10 +4,12 @@ See our website for more information: http://ncarchedi.github.io/swirl/
 
 If you wish to install and run the package on your computer, perform the following commands from your R console:
 
-> install.packages("devtools")
-> library(devtools)
-> install_github(repo="swirl", username="ncarchedi")
-> library(swirl)
-> swirl()
-
-Please contact us with any questions, comments, or concerns regarding the swirl package.
++```
++install.packages("devtools")
++library(devtools)
++install_github(repo="swirl", username="ncarchedi")
++library(swirl)
++swirl()
++```
++
++Please contact us with any questions, comments, or concerns regarding the swirl package.
