@@ -139,7 +139,7 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
       str.ans <- readline("ANSWER: ")
 
       # Allow for variable assingment syntax and spacing
-      str.ans <- sub('$ *(=|<-) *', ' <- ', str.ans)
+      str.ans <- sub('^ *([\\w\\d\\.]*) *(=|<-) *', '\\1 <- ', str.ans, perl=TRUE)
 
       # First make sure the user does not enter 'Swirl' or 'swirl()'
       if(str.ans == "Swirl" | str.ans == "swirl()") {
