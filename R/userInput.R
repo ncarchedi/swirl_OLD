@@ -166,7 +166,7 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
           praise()
           recordIsCorrect(is.correct=TRUE, text.file.path=progress.file.path)
           break
-        } else if(identical(gsub(" ", "", str.ans), gsub(" ", "", correct))) {
+        } else if(identical(gsub("[[:space:]]","",correct), gsub("[[:space:]]","",str.ans))) {
           cat("\nDid you mean \'", correct, "\'?\n", sep="")
           resp <- readline("\nANSWER: ")
           if(isYes(resp)) {
