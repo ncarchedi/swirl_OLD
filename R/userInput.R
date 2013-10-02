@@ -1,8 +1,8 @@
 #' Gets user input
-#' 
-#' Solicits a response from user depending on the type of question specified. 
+#'
+#' Solicits a response from user depending on the type of question specified.
 #' Also writes corresponding progress data to progress file.
-#' 
+#'
 #' @param question character string representing the question body
 #' @param type character string specifying the type of question
 #' @param choices character vector of choices, only specified for question type
@@ -11,27 +11,27 @@
 #' @param hint character string of hint to be shown to user after incorrect response
 #' @param progress.file.path full file path to file where progress is recorded
 #' @return strikes number of incorrect responses before getting correct response
-userInput <- function(question, type=c("exact", "range", "text", "command", "multiple"), 
+userInput <- function(question, type=c("exact", "range", "text", "command", "multiple"),
                       choices="", correct, hint="", progress.file.path) {
   # Initialize strikes to zero
   strikes <- 0
-  
+
   # Print question
   cat("\n", question, sep="")
-  
+
   ### For exact answer type
   if(type=="exact") {
     repeat {
       cat("\n\n")
       str.ans <- readline("ANSWER: ")
-      
+
       # First make sure the user does not enter 'Swirl' or 'swirl()'
       if(str.ans == "Swirl" | str.ans == "swirl()") {
         tryAgain(hint)
         recordIsCorrect(is.correct=FALSE, text.file.path=progress.file.path)
         strikes <- strikes + 1
         cat("\n\n", question, sep="")
-        
+
       } else if(str.ans != "") {
         recordString(my.string=str.ans, text.file.path=progress.file.path)
         eval.ans <- tryCatch(expr=as.double(eval(parse(text=str.ans))),
@@ -62,14 +62,14 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
     repeat {
       cat("\n\n")
       str.ans <- readline("ANSWER: ")
-      
+
       # First make sure the user does not enter 'Swirl' or 'swirl()'
       if(str.ans == "Swirl" | str.ans == "swirl()") {
         tryAgain(hint)
         recordIsCorrect(is.correct=FALSE, text.file.path=progress.file.path)
         strikes <- strikes + 1
         cat("\n\n", question, sep="")
-        
+
       } else if(str.ans != "") {
         recordString(my.string=str.ans, text.file.path=progress.file.path)
         num.ans <- tryCatch(expr=as.numeric(eval(parse(text=str.ans))),
@@ -103,14 +103,14 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
     repeat {
       cat("\n\n")
       str.ans <- readline("ANSWER: ")
-      
+
       # First make sure the user does not enter 'Swirl' or 'swirl()'
       if(str.ans == "Swirl" | str.ans == "swirl()") {
         tryAgain(hint)
         recordIsCorrect(is.correct=FALSE, text.file.path=progress.file.path)
         strikes <- strikes + 1
         cat("\n\n", question, sep="")
-        
+
       } else if(str.ans != "") {
         recordString(my.string=str.ans, text.file.path=progress.file.path)
         lower.ans <- tryCatch(expr=tolower(str.ans),
@@ -137,14 +137,17 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
     repeat {
       cat("\n\n")
       str.ans <- readline("ANSWER: ")
-      
+
+      # Allow for variable assingment syntax and spacing
+      str.ans <- sub('^ *([\\w\\d\\.]*) *(=|<-) *', '\\1 <- ', str.ans, perl=TRUE)
+
       # First make sure the user does not enter 'Swirl' or 'swirl()'
       if(str.ans == "Swirl" | str.ans == "swirl()") {
         tryAgain(hint)
         recordIsCorrect(is.correct=FALSE, text.file.path=progress.file.path)
         strikes <- strikes + 1
         cat("\n\n", question, sep="")
-        
+
       } else if(str.ans != "") {
         recordString(my.string=str.ans, text.file.path=progress.file.path)
         eval.ans <- tryCatch(expr=eval(parse(text=str.ans)),
@@ -154,13 +157,14 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
                              }
         )
         if(!identical(eval.ans, -99999)) {
-          if(grepl("<-", str.ans)) {        
+          if(grepl("<-", str.ans)) {
             new.str.ans <- sub("<-", "<<-", str.ans)
           } else {
             print(eval(parse(text=str.ans)))  # Print evaluated command since it is valid and isn't an assignment
             new.str.ans <- str.ans
           }
         }
+        # Correct response
         if(identical(str.ans, correct)) {
           eval(parse(text=new.str.ans))
           praise()
@@ -193,7 +197,7 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
       cat("\n")
       str.ans <- select.list(choices=choices)
       recordString(my.string=str.ans, text.file.path=progress.file.path)
-      
+
       str.ans <- tolower(str.ans)
       correct <- tolower(correct)
       if(identical(str.ans, correct)) {
