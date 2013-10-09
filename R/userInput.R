@@ -150,23 +150,16 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
 
       } else if(str.ans != "") {
         recordString(my.string=str.ans, text.file.path=progress.file.path)
-        eval.ans <- tryCatch(expr=eval(parse(text=str.ans)),
-                             error=function(e) {
-                               cat("\nNot a valid input!\n")
-                               return(-99999)
-                             }
-        )
-        if(!identical(eval.ans, -99999)) {
-          if(grepl("<-", str.ans)) {
-            new.str.ans <- sub("<-", "<<-", str.ans)
-          } else {
-            print(eval(parse(text=str.ans)))  # Print evaluated command since it is valid and isn't an assignment
-            new.str.ans <- str.ans
-          }
-        }
+        
         # Correct response
         if(identical(str.ans, correct)) {
-          eval(parse(text=new.str.ans))
+          if(grepl("<-", str.ans)) {
+            # Evaluate command with global assignment
+            eval(parse(text=sub("<-", "<<-", str.ans)))
+          } else {
+            # Evaluate and print since the command isn't an assignment
+            print(eval(parse(text=str.ans)))
+          }
           praise()
           recordIsCorrect(is.correct=TRUE, text.file.path=progress.file.path)
           break
@@ -174,7 +167,13 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
           cat("\nDid you mean \'", correct, "\'?\n", sep="")
           resp <- readline("\nANSWER: ")
           if(isYes(resp)) {
-            eval(parse(text=gsub("<-", "<<-", correct)))
+            if(grepl("<-", correct)) {
+              # Evaluate command with global assignment
+              eval(parse(text=sub("<-", "<<-", correct)))
+            } else {
+              # Evaluate and print since the command isn't an assignment
+              print(eval(parse(text=correct)))
+            }
             praise()
             recordIsCorrect(is.correct=TRUE, text.file.path=progress.file.path)
             break
