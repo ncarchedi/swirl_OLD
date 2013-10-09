@@ -288,3 +288,19 @@ findUserLocation <- function(progress.file.path) {
   
   return(currentLocation)
 }
+
+#' Given course directory, allow swirl admin to choose a desired module
+#' 
+#' Prompts swirl admin to choose the module they would like to take and returns the
+#' course name.
+#' 
+#' @param course Relative course directory as returned by chooseCourse, e.g., "Courses/Data_Analysis"
+#' @return name of chosen module, such as "Module1", "Module2", etc.
+chooseModule <- function(course) {
+  modules <- list.files(path=file.path(path.package("swirl"), course ))
+  modules <- unlist(strsplit(modules, ".", fixed=TRUE))
+  modules <- modules[ grep("Module", modules)]
+  cat("\nOn which module would you like to begin?\n")
+  moduleName <- select.list(modules)
+  return(moduleName)
+}
