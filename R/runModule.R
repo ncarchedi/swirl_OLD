@@ -13,7 +13,7 @@ runModule <- function(courseDir, module.name, row.start, progress.file.path,
   # Determine file extention for rda file
   rdaPath <- file.path(courseDir, paste(module.name, ".rda", sep=""))
   
-  # Load module content and info
+  # Load module content and info - 2 dataframes titled "mod" and "mod.info"
   load(rdaPath)
   
   # Change all NA to blanks for backwards compatability
@@ -115,42 +115,24 @@ runModule <- function(courseDir, module.name, row.start, progress.file.path,
       readline("\n...")
       
     } else if(mod$Output.Type[i] == "question") {  ### QUESTION
-      if(!exists("proceed2Mandatory")) {
-        proceed2Mandatory <- FALSE
-      }
+      q <- mod$Output[i]
+      ans.type <- mod$Answer.Type[i]
+      ch <- unlist(strsplit(mod$Choices[i], ";\\s?"))
+      correct.ans <- unlist(strsplit(mod$Correct.Answer[i], ";\\s?"))
+      h <- mod$Hint[i]
+      # Measure time taken to get correct answer
+      # Start the clock
+      ptm <- proc.time()
+      strikes <- userInput(question=q, type=ans.type, choices=ch, 
+                           correct=correct.ans, hint=h, progress.file.path)
+      # Record time taken - total elapsed time used
+      time.on.question <- proc.time() - ptm
+      cat("time.on.question", time.on.question[3], "\n", sep=" ", 
+          file=progress.file.path, append=TRUE)
       
-      # Skip question of it's optional and the user was not flagged on last one
-      if(mod$Status[i] == "optional" && proceed2Mandatory == TRUE) {
-        next
-      } else {
-        q <- mod$Output[i]
-        ans.type <- mod$Answer.Type[i]
-        ch <- unlist(strsplit(mod$Choices[i], ";\\s?"))
-        correct.ans <- unlist(strsplit(mod$Correct.Answer[i], ";\\s?"))
-        h <- mod$Hint[i]
-        # Measure time taken to get correct answer
-        # Start the clock
-        ptm <- proc.time()
-        strikes <- userInput(question=q, type=ans.type, choices=ch, 
-                             correct=correct.ans, hint=h, progress.file.path)
-        # Record time taken - total elapsed time used
-        time.on.question <- proc.time() - ptm
-        cat("time.on.question", time.on.question[3], "\n", sep=" ", 
-            file=progress.file.path, append=TRUE)
-        
-        # If user gets question wrong 3 or more times then flag it in progress file
-        # and go on to next row of content as usual
-        
-        if(strikes >= 3) {
-          cat("flagged\n", file=progress.file.path, append=TRUE)
-          proceed2Mandatory <- FALSE
-          
-          # If user does not get flagged on question, then signal to proceed to next
-          # mandatory question
-          
-        } else {
-          proceed2Mandatory <- TRUE
-        }
+      # If user gets question wrong 3 or more times then flag it in progress file
+      if(strikes >= 3) {
+        cat("flagged\n", file=progress.file.path, append=TRUE)
       }
       
     } else if(mod$Output.Type[i] == "figure") {  ### FIGURE
