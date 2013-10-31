@@ -38,6 +38,12 @@ runModule <- function(courseDir, module.name, row.start, progress.file.path,
     datasets.as.chars <- unlist(strsplit(mod.info[4,2], ", ", fixed=T))
     data(list=datasets.as.chars, envir=.GlobalEnv)
     
+    # Execute variable assignment required for module as specified in mod.info (if included)
+    if(dim(mod.info)[1] > 4 && mod.info[5,2] != "") {
+      varAssString <- mod.info[5,2]
+      eval(parse(text=varAssString), envir=.GlobalEnv)
+    }
+    
     # Find end of content and trim empty rows after this
     last.row <- max(which(mod$Output.Type != ""))
     mod <- mod[1:last.row, ]
