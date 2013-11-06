@@ -38,8 +38,8 @@ saveModule <- function(moduleName, excelDir, courseDirectory) {
   }
 }
 
-moduleName <- c("Module1")
-excelDir <- "C:\\Users\\Nick\\Dropbox\\swirl_shared\\Open Intro"
-courseDirectory <- "C:\\Users\\Nick\\Dropbox\\R_Working_Directory\\My_Packages\\swirl\\inst\\Courses\\Open_Intro"
+moduleName <- c("Module2")
+excelDir <- "C:\\Users\\Nick\\Dropbox\\swirl_shared\\Data Analysis"
+courseDirectory <- "C:\\Users\\Nick\\Dropbox\\R_Working_Directory\\My_Packages\\swirl\\inst\\Courses\\Data_Analysis"
 
 #saveModule(moduleName, excelDir, courseDirectory)
