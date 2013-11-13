@@ -1,102 +1,44 @@
 <!DOCTYPE html>
 <html>
-
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="swirl : Statistics with Interactive R Learning (An R Package)" />
+	<title>We've moved!</title>
+  
+	<!--REDIRECTING STARTS-->
+	<link rel="canonical" href="http://swirlstats.com/"/>
+	<noscript>
+	<meta http-equiv="refresh" content="8;URL=http://swirlstats.com/">
+	</noscript>
+	<script type="text/javascript">
+	var url = "http://swirlstats.com/";
+	var delay = "8000";
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+	window.onload = function ()
+	{
+		DoTheRedirect()
+	}
+	function DoTheRedirect()
+	{
+		setTimeout(GoToURL, delay)
+	}
+	function GoToURL()
+	{
+		// IE8 and lower fix
+		if (navigator.userAgent.match(/MSIE\s(?!9.0)/))
+		{
+			var referLink = document.createElement("a");
+			referLink.href = url;
+			document.body.appendChild(referLink);
+			referLink.click();
+		}
 
-    <title>swirl</title>
+		// All other browsers
+		else { window.location.replace(url); }
+	}
+	</script>
+	<!--REDIRECTING ENDS-->
   </head>
-
-  <body>
-
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/ncarchedi/swirl">View on GitHub</a>
-
-          <a href="http://ncarchedi.github.io/swirl">
-			<h1 id="project_title">swirl</h1>
-			<h2 id="project_tagline">Statistics with Interactive R Learning (An R Package)</h2>
-		  </a>
-
-            <!--
-			<section id="downloads">
-              <a class="zip_download_link" href="https://github.com/ncarchedi/swirl/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/ncarchedi/swirl/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-			-->
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>
-<a class="anchor"><span class="octicon octicon-link"></span></a>You're a student!</h1>
-
-<p>As you've already learned, <strong>swirl</strong> is a platform for learning statistics and R simultaneously and interactively. Here, you will find step-by-step instructions on how to get up and running with <strong>swirl</strong> as soon as possible. Since the <strong>swirl</strong> package is still young at heart, the process of downloading it is slightly more involved right now than it will be in the future.</p>
-
-<h2>
-<a class="anchor"><span class="octicon octicon-link"></span></a>Step 1: Get R and RStudio
-</h2>
-<p>In order to run <strong>swirl</strong>, you must have R installed on your computer. In addition to R, it highly recommended that you install RStudio, which will make your experience with R much more enjoyable.</p>
-
-<p>If you need to install R, you can do so <a href="http://cran.rstudio.com/">here</a>.</p>
-
-<p>If you need help installing R, check out one of the following videos (courtesy of Roger Peng at Johns Hopkins Biostatistics):</p>
-
-<ul>
-	<li><a href="http://youtu.be/mfGFv-iB724">Installing R on Windows</a></li>
-	<li><a href="http://youtu.be/Icawuhf0Yqo">Installing R on Mac</a></li>
-</ul>
-
-<p>If you need to install RStudio, you can do so <a href="http://www.rstudio.com/ide/download/desktop">here</a>. You probably want the download located under the heading <strong>Recommended For Your System</strong>.</p>
-
-<h2>
-Step 2: Install <strong>devtools</strong> package
-</h2>
-<p>
-Since <strong>swirl</strong> is still in development, you'll need to get the <strong>devtools</strong> R package in order to download it. Open RStudio (or just plain R if you don't have RStudio) and type the following into the console, pressing Enter after each line:
-</p>
-<p><code>> install.packages("devtools")</code></p>
-<p><code>> library("devtools")</code></p>
-<p>Note that the <code>></code> symbol at the beginning of each line is R's prompt for the user to type something into the console. We include it here so you know that these commands are to be typed into the console and not elsewhere. The part you type begins after <code>></code>.</p>
-<p><strong>IMPORTANT: If you receive a notice about requiring Rtools, you can safely ignore it and proceed with the installation. Rtools is only required if you intend to create your own packages on a Windows machine.</strong></p>
-
-<h2>
-Step 3: Get swirl!
-</h2>
-<p>
-Now that you have RStudio (or just plain R) up and running and you have successfully installed and loaded the <strong>devtools</strong> package, you are ready to get <strong>swirl</strong>! Type the following into the console and press Enter:
-</p>
-<p><code>> install_github(repo="swirl", username="ncarchedi")</code></p>
-
-<h2>
-Step 4: Start swirl and let the fun begin!
-</h2>
-<p>
-This is the only step that you will repeat every time you want to run <strong>swirl</strong>. First you will load the package using the <code>library</code> function, which you've already seen above. Then you will call the function that starts the magic! Type the following, pressing Enter after each line:
-<p><code>> library("swirl")</code></p>
-<p><code>> swirl()</code></p>
-
-<p>And you're off to the races! Please <a href="mailto:swirlboss@gmail.com">contact us</a> if you have trouble completing any of these steps.
-
-      </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">swirl maintained by <a href="https://github.com/ncarchedi">Nick Carchedi</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
+  </body>
+	<p>Thanks for stopping by! We've moved to <a href="http://swirlstats.com/">http://swirlstats.com/</a>.</p>
+	<p>You will be automatically redirected to our new website in a few seconds....</p>
   </body>
 </html>
