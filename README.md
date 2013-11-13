@@ -1,6 +1,6 @@
 This is the official repository for the swirl (Statistics with Interactive R Learning) R package.
 
-See our website for more information: http://ncarchedi.github.io/swirl/
+See our website for more information: http://swirlstats.com
 
 If you wish to install and run the package on your computer, perform the following commands from your R console:
 
