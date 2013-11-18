@@ -18,12 +18,18 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
 
   # Print question
   cat("\n", question, sep="")
+  
+  # Remove characters which make no substantive difference from type and correct.
+  # For now that just means white space.
+  spurious <- "[[:space:]]"
+  type <- gsub(spurious, "", type)
+  correct <- gsub(spurious, "", correct)
 
   ### For exact answer type
   if(type=="exact") {
     repeat {
       cat("\n\n")
-      str.ans <- readline("ANSWER: ")
+      str.ans <- gsub(spurious, "", readline("ANSWER: "))
 
       # First make sure the user does not enter 'Swirl' or 'swirl()'
       if(str.ans == "Swirl" | str.ans == "swirl()") {
@@ -61,7 +67,7 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
   } else if(type=="range") {  ### For range answer type
     repeat {
       cat("\n\n")
-      str.ans <- readline("ANSWER: ")
+      str.ans <- gsub(spurious, "", readline("ANSWER: "))
 
       # First make sure the user does not enter 'Swirl' or 'swirl()'
       if(str.ans == "Swirl" | str.ans == "swirl()") {
@@ -102,7 +108,7 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
   } else if(type=="text") {  ### For text answer type
     repeat {
       cat("\n\n")
-      str.ans <- readline("ANSWER: ")
+      str.ans <- gsub(spurious, "", readline("ANSWER: "))
 
       # First make sure the user does not enter 'Swirl' or 'swirl()'
       if(str.ans == "Swirl" | str.ans == "swirl()") {
@@ -140,6 +146,11 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
 
       # Allow for variable assingment syntax and spacing
       str.ans <- sub('^ *([\\w\\d\\.]*) *(=|<-) *', '\\1 <- ', str.ans, perl=TRUE)
+      
+      # For now, remove whitespace even though previous line inserts it. Not ideal.
+      # TODO: something better, such as using R's parse function since this is a command.
+      
+      str.ans <- gsub(spurious, "", str.ans)
 
       # First make sure the user does not enter 'Swirl' or 'swirl()'
       if(str.ans == "Swirl" | str.ans == "swirl()") {
@@ -194,7 +205,7 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
   } else if(type=="multiple") {
     repeat {
       cat("\n")
-      str.ans <- select.list(choices=choices)
+      str.ans <- gsub(spurious, "", select.list(choices=choices))
       recordString(my.string=str.ans, text.file.path=progress.file.path)
 
       str.ans <- tolower(str.ans)

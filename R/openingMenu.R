@@ -90,8 +90,7 @@ openingMenu <- function() {
       
       cat("\nWelcome, Mr. or Mrs. Important!\n")
       course.start <- chooseCourse()
-      cat("\nOn which module would you like to begin?")
-      module.start <- readline("\nANSWER: ")
+      module.start <- chooseModule(course.start[[1]])
       cat("\nAnd which row of the content table would you like to start on?")
       row.start <- as.numeric(readline("\nANSWER: "))
       
