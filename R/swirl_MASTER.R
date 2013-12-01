@@ -59,7 +59,7 @@ swirl <- function() {
                 paste(taggedTopics, collapse=", "), "\n")
             cat("\nWhich of these topics would you like to review?\n")
             options <- c(taggedTopics, "I'm good to go!")
-            tags2Review <- select.list(options, multiple=TRUE)
+            tags2Review <- select.list(options, multiple=TRUE, graphics=FALSE)
             
             if(!identical(tags2Review, "I'm good to go!")) {
               # Run module in review mode for tags of interest

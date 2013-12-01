@@ -194,7 +194,7 @@ userInput <- function(question, type=c("exact", "range", "text", "command", "mul
   } else if(type=="multiple") {
     repeat {
       cat("\n")
-      str.ans <- select.list(choices=choices)
+      str.ans <- select.list(choices=choices, graphics=FALSE)
       recordString(my.string=str.ans, text.file.path=progress.file.path)
 
       str.ans <- tolower(str.ans)

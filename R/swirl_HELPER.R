@@ -251,7 +251,7 @@ chooseCourse <- function() {
   courseNames <- gsub("_", " ", courseDirList)
                            
   cat("\nWhich course would you like to take?\n")
-  courseName <- select.list(courseNames)
+  courseName <- select.list(courseNames, graphics=FALSE)
   courseDirName <- file.path("Courses", gsub(" ", "_", courseName))
   
   return(list(courseDirName, courseName))
